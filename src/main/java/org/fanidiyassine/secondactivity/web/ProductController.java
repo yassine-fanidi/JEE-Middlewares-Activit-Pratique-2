@@ -1,5 +1,6 @@
 package org.fanidiyassine.secondactivity.web;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.fanidiyassine.secondactivity.entities.Product;
 import org.fanidiyassine.secondactivity.repositories.ProductRepository;
@@ -30,7 +31,7 @@ public class ProductController {
         return "redirect:/user/index";
     }
 
-    @GetMapping("/admin/delete")
+    @PostMapping("/admin/delete")
     public String delete(@RequestParam(name = "id") Long id){
         productRepository.deleteById(id);
         return "redirect:/user/index";
@@ -52,5 +53,16 @@ public class ProductController {
     @GetMapping("/notAuthorized")
     public String notAuthorized(){
         return "notAuthorized";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "login";
     }
 }
