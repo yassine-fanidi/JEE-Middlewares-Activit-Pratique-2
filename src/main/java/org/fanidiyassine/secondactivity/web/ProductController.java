@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import org.fanidiyassine.secondactivity.entities.Product;
 import org.fanidiyassine.secondactivity.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +22,12 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping("/user/index")
-    public String index(Model model){
-        List<Product> products = productRepository.findAll();
-        model.addAttribute("productsList", products);
+    public String index(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+        //List<Product> products = productRepository.findAll();
+        Page<Product> pageProducts = productRepository.findAll(PageRequest.of(page, size));
+        model.addAttribute("productsList", pageProducts.getContent());
+        model.addAttribute("pages", new  int[pageProducts.getTotalPages()]);
+        model.addAttribute("currentPage", page);
         return "products";
     }
 
