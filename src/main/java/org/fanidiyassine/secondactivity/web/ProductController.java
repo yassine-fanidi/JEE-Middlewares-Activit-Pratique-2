@@ -22,12 +22,14 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping("/user/index")
-    public String index(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+    public String index(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "") String keyword){
         //List<Product> products = productRepository.findAll();
-        Page<Product> pageProducts = productRepository.findAll(PageRequest.of(page, size));
+        //Page<Product> pageProducts = productRepository.findAll(PageRequest.of(page, size));
+        Page<Product> pageProducts = productRepository.findByNameContainsIgnoreCase(keyword, PageRequest.of(page, size));
         model.addAttribute("productsList", pageProducts.getContent());
         model.addAttribute("pages", new  int[pageProducts.getTotalPages()]);
         model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", keyword);
         return "products";
     }
 
@@ -37,9 +39,9 @@ public class ProductController {
     }
 
     @PostMapping("/admin/delete")
-    public String delete(@RequestParam(name = "id") Long id){
+    public String delete(@RequestParam(name = "id") Long id, String keyword, int page){
         productRepository.deleteById(id);
-        return "redirect:/user/index";
+        return "redirect:/user/index?page="+page+"&keyword="+keyword;
     }
 
     @GetMapping("/admin/newProduct")

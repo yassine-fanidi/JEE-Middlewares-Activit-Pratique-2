@@ -16,7 +16,7 @@
         </div>
         <form method="get" th:action="@{/user/index}">
             <label>Keyword</label>
-            <input type="text" name="keyword">
+            <input type="text" name="keyword" th:value="${keyword}">
             <button class="btn btn-outline-info">Search</button>
         </form>
         <table class="table">
@@ -30,7 +30,7 @@
                     <td th:text="${p.price}"></td>
                     <td th:text="${p.quantity}"></td>
                     <td sec:authorize="hasRole('ADMIN')">
-                        <form method="post" th:action="@{/admin/delete(id=${p.id})}">
+                        <form method="post" th:action="@{/admin/delete(id = ${p.id}, keyword = ${keyword}, page = ${currentPage})}">
                             <button class="btn btn-danger" type="submit">Delete</button>
                         </form>
                     </td>
@@ -39,7 +39,7 @@
         </table>
         <ul class="nav nav-pills">
             <li th:each="page, status : ${pages}">
-                <a th:class="${status.index == currentPage ? 'btn btn-info m-1' : 'btn btn-outline-info m-1'}" th:href="@{/user/index(page=${status.index})}" th:text="${status.index}"></a>
+                <a th:class="${status.index == currentPage ? 'btn btn-info m-1' : 'btn btn-outline-info m-1'}" th:href="@{/user/index(page=${status.index}, keyword = ${keyword})}" th:text="${status.index}"></a>
             </li>
         </ul>
     </div>
