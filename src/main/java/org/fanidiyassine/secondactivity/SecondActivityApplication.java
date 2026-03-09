@@ -40,9 +40,21 @@ public class SecondActivityApplication {
                             .quantity(10)
                             .build()
             );
+
+            Product p1 = new Product();
+            p1.setName("Laptop");
+            p1.setPrice(7000);
+            p1.setQuantity(10);
+
+            Product p2 = new Product(null, "Desktop", 9000, 40);
+
+            productRepository.save(p1);
+            productRepository.save(p2);
+
             productRepository.findAll().forEach(p -> {
                 System.out.println(p.toString());
             });
+
         };
     }
 
