@@ -34,6 +34,11 @@
                             <button class="btn btn-danger" type="submit">Delete</button>
                         </form>
                     </td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-success" th:href ="@{/admin/editProduct(id=${p.id}, keyword = ${keyword}, page = ${currentPage})}">
+                            Edit
+                        </a>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -51,10 +51,10 @@ public class ProductController {
     }
 
     @PostMapping("/admin/saveProduct")
-    public String saveProduct(@Valid Product product, BindingResult bindingResult){
+    public String saveProduct(@Valid Product product, BindingResult bindingResult, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") String keyword){
         if(bindingResult.hasErrors()){return "new-product";}
         productRepository.save(product);
-        return "redirect:/user/index";
+        return "redirect:/user/index?page="+page+"&keyword="+keyword;
     }
 
     @GetMapping("/notAuthorized")
@@ -71,5 +71,15 @@ public class ProductController {
     public String logout(HttpSession session){
         session.invalidate();
         return "login";
+    }
+
+    @GetMapping("/admin/editProduct")
+    public String editProduct(Model model, Long id, String keyword, int page){
+        Product product = productRepository.findById(id).orElse(null);
+        if( product == null) throw  new RuntimeException("Product not found");
+        model.addAttribute("product", product);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("page", page);
+        return "editProduct";
     }
 }
